@@ -3,60 +3,50 @@ using System.Diagnostics;
 
 Console.WriteLine("Prime numbers in prime time!");
 
+Console.WriteLine("Find primes.");
+Console.WriteLine("Input the number you would like to start finding primes from: ");
+long startNum = -1;
+startNum = Convert.ToInt32(Console.ReadLine());
+
+while (startNum < 0)
+{
+    Console.WriteLine("Please input a number above 0.");
+    startNum = Convert.ToInt32(Console.ReadLine());
+}
+Console.WriteLine("Your start number: " + startNum);
+Console.WriteLine("Input the number you would like to end the search for primes: ");
+long endNum = -1;
+endNum = Convert.ToInt32(Console.ReadLine());
+
+while (endNum < startNum)
+{
+    Console.WriteLine("Please input a number above the start number.");
+    endNum = Convert.ToInt32(Console.ReadLine());
+}
+
 PrimeGenerator pg = new PrimeGenerator();
-var swSequential = Stopwatch.StartNew();
-pg.GetPrimesSequential(1, 1000000);
-swSequential.Stop();
+var primes = pg.GetPrimesParallel(startNum, endNum);
 
-var swParallel = Stopwatch.StartNew();
-pg.GetPrimesParallel(1, 1000000);
-swParallel.Stop();
+int counter = 0;
+int maxLength = 10;
 
-//-----------------------------------------------
+Console.WriteLine("Your primes: ");
 
-var swSeq1To10Mil = Stopwatch.StartNew();
-pg.GetPrimesSequential(1, 10000000);
-swSeq1To10Mil.Stop();
+foreach (var prime in primes)
+{
+    counter++;
+    if (counter == maxLength)
+    {
+        Console.Write("\n" + prime + " | ");
+        counter = 0;
+    }
+    else { Console.Write(prime + " | "); }
+}
 
-var swPara1To10Mil = Stopwatch.StartNew();
-pg.GetPrimesParallel(1, 10000000);
-swPara1To10Mil.Stop();
-
-//-----------------------------------------------
-
-var swSeq1MilTo2Mil = Stopwatch.StartNew();
-pg.GetPrimesSequential(1, 10000000);
-swSeq1MilTo2Mil.Stop();
-
-var swPara1MilTo2Mil = Stopwatch.StartNew();
-pg.GetPrimesParallel(1, 10000000);
-swPara1MilTo2Mil.Stop();
-
-//-----------------------------------------------
-
-var swSeq10MilTo20Mil = Stopwatch.StartNew();
-pg.GetPrimesSequential(1, 10000000);
-swSeq10MilTo20Mil.Stop();
-
-var swPara10MilTo20Mil = Stopwatch.StartNew();
-pg.GetPrimesParallel(1, 10000000);
-swPara10MilTo20Mil.Stop();
-
-// a
-Console.WriteLine($"Sequential foreach loop | 1 - 1.000.000 | Time Taken : {swSequential.ElapsedMilliseconds} ms.");
-Console.WriteLine($"Parallel.ForEach loop  | 1 - 1.000.000 | Time Taken : {swParallel.ElapsedMilliseconds} ms.\n");
-
-// b
-Console.WriteLine($"Sequential foreach loop | 1 - 10.000.000 | Time Taken : {swSeq1To10Mil.ElapsedMilliseconds} ms.");
-Console.WriteLine($"Parallel.ForEach loop  | 1 - 10.000.000 | Time Taken : {swPara1To10Mil.ElapsedMilliseconds} ms.\n");
-
-// c
-Console.WriteLine($"Sequential foreach loop | 1.000.000 - 2.000.000 | Time Taken : {swSeq1MilTo2Mil.ElapsedMilliseconds} ms.");
-Console.WriteLine($"Parallel.ForEach loop  | 1.000.000 - 2.000.000 | Time Taken : {swPara1MilTo2Mil.ElapsedMilliseconds} ms.\n");
-
-// d
-Console.WriteLine($"Sequential foreach loop | 10.000.000 - 20.000.000 | Time Taken : {swSeq10MilTo20Mil.ElapsedMilliseconds} ms.");
-Console.WriteLine($"Parallel.ForEach loop  | 10.000.000 - 20.000.000 | Time Taken : {swPara10MilTo20Mil.ElapsedMilliseconds} ms.");
+/**
+ * Uncomment the below code to test for assignment 3 tasks.
+ */
+//pg.TestAssignment3();
 
 Console.ReadLine();
 
